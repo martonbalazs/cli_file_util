@@ -1,0 +1,52 @@
+#!/bin/bash
+# 08.01.02
+# Usage: linkffile <dir> <file>
+# Reads <file> until the first space of each line, and recursively links files from <dir> with matching filenames to the current dir. Asks if ambiguous.
+
+if [ ! -d "$1" ]
+then
+ echo "Can't find the dir $1"
+ exit
+fi
+
+if [ ! -f "$2" ]
+then
+ echo "Can't find the file $2"
+ exit
+fi
+
+sorszam=`cat $2 | awk 'BEGIN { a = 0 } { a++ } END { print(a); }'`
+
+for i in `seq 1 $sorszam`;
+do
+ awkmondta=`cat $2 | awk '((NR == sor) && ($1 !~ /^\*/)) { 
+ print($1)
+ }' sor=$i`
+ if [ "$awkmondta" != "" ]; then
+  findutasitas="find $1 -name *$awkmondta*"
+  sorsz=`$findutasitas 2>/dev/null | awk 'BEGIN { a = 0 } { a++ } END { print(a); }'`
+  if [ "$sorsz" = "1" ]; then
+   ln -s `$findutasitas 2>/dev/null`
+  fi
+  if [ "$sorsz" = "0" ]; then
+   echo "Couldn't find $awkmondta"
+   echo ""
+  fi
+  if [ $sorsz -gt 1 ]; then
+   melyik=0
+#   while [ $melyik -lt 1 ] || [ $melyik -gt $sorsz ]; do
+   while [[ !($melyik -ge 1 && $melyik -le $sorsz) ]]; do
+    echo "Found several of:"
+    $findutasitas 2>/dev/null
+    echo "Which one should we use?"
+    read melyik
+    if [ $melyik -le $sorsz ] && [ $melyik -ge 1 ]; then
+     ln -s `$findutasitas 2>/dev/null | awk '(NR == melyikis) {print($1)}' melyikis=$melyik`
+    else
+     echo "I don't like your answer."
+    fi
+    echo ""
+   done
+  fi
+ fi
+done

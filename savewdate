@@ -1,0 +1,77 @@
+#!/bin/bash
+# 2014.05.29
+# Usage: savewdate filename
+
+if [[ "x$1" == "x" ||  ! -f $1 ]]
+then
+ echo "Can't find the file $1."
+ exit
+fi
+
+d="0"
+m="0"
+y="0"
+
+veg=${1##*.}
+elej=${1%.*}
+
+echo "d/D; m/M; y/Y: decrease/increase Day, Month, Year. r: reset; c: cancel; [enter]: ok."
+
+while true; do
+
+stamp=`date -d "$d days $m months $y years" +%y%m%d`
+if [ "$1" == "${1/\./}" ]
+then
+ newfnm="$1""_"$stamp
+else
+ newfnm="$elej""_"$stamp".""$veg"
+fi
+
+echo -e -n "\rMaking a copy: $newfnm"
+
+ read -s -n 1 key
+
+ if [[ $key == "" ]] ; then
+  break
+ fi
+
+ if [[ $key == "y" ]] ; then
+  ((y--))
+ fi
+
+ if [[ $key == "Y" ]] ; then
+  ((y++))
+ fi
+
+ if [[ $key == "m" ]] ; then
+  ((m--))
+ fi
+
+ if [[ $key == "M" ]] ; then
+  ((m++))
+ fi
+
+ if [[ $key == "d" ]] ; then
+  ((d--))
+ fi
+
+ if [[ $key == "D" ]] ; then
+  ((d++))
+ fi
+
+ if [[ $key == "r" ]] ; then
+  y=0
+  m=0
+  d=0
+ fi
+
+ if [[ $key == "c" ]] ; then
+  echo -e "\nHaven't done anything."
+  exit
+ fi
+
+done
+
+echo -e "\n$1 --> $newfnm"
+cp "$1" "$newfnm"
+chmod a-w "$newfnm"

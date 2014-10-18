@@ -1,0 +1,40 @@
+#!/bin/bash
+# Cleans files older than time
+# Usage: deloldfiles [time in days]. Without parameter defaults to 60 days.
+
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]] ; then
+ agel=60
+else
+ agel=$1
+fi
+echo Deleting files older than "$agel" days.
+
+for j in *
+ do
+  if [[ -f "$j" && `find "$j" -mtime +$agel` ]]
+  then
+   filelist=("${filelist[@]}" "$j")
+  fi
+ done
+
+if [ -z "$filelist" ]
+then
+ echo "Nothing to delete."
+ exit
+fi
+
+echo "Deleting: ${filelist[@]}"
+tetszik="a"
+echo "Can I? y/n"
+read tetszik
+if [ "$tetszik" == "y" ]
+then
+ for j in "${filelist[@]}"
+ do
+  rm -v "$j"
+ done
+ exit
+fi
+
+echo "Haven't done anything."

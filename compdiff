@@ -1,0 +1,17 @@
+#!/bin/bash
+mkdir kul
+mkdir $1/kul
+for i in `ls *.*`; do
+ if [[ -e $i && -e $1/$i ]]
+  then
+  cmp -s `ls $i` `ls $1/$i`
+  if [ "$?" -ne "0" ]
+    then
+    echo $i
+    mv $i kul/
+   mv $1/$i $1/kul
+#    emacs kul/$i $1/kul/$i
+   vimdiff kul/$i $1/kul/$i
+  fi
+ fi
+done

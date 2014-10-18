@@ -1,0 +1,11 @@
+#!/bin/bash
+# 2013.09.05
+# Usage: mkrnddir <number>
+#	<number> is the length of the random string. Default is 5. 0 is also accepted.
+# Use with "." to also change to dir.
+
+if [[ `expr $1 + 1 2> /dev/null` ]] && [[ $1 != "" ]] ; then h=$1 ; else h=5 ; fi
+if [ "$h" -eq "0" ] ; then d=`date +%y%m%d` ; else d=`date +%y%m%d`_`strings /dev/urandom | tr -dc a-z-0-9 | tr -d - | head -c$h`; fi
+echo "$d"
+mkdir "$d"
+cd "$d"

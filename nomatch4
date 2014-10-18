@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Usage: nomatch4 <dir>
+# Checks if any of the local files agree with any of the ones in the target dir (recursive). Listst all local files not matched.
+
+if [ -z "$1" ]
+then
+ echo "Default dir: /tmp/, using this one"
+ remdir=/tmp
+else
+ remdir=$1
+fi
+
+if [ ! -d "$remdir" ]
+then
+ echo "Can't find $remdir"
+ exit
+fi
+
+# For all local files
+for i in *
+do
+ if [ ! -f "$i" ]
+ then
+  continue
+ fi
+ matched=0
+
+# For all remote files
+ for j in $(find "$remdir" -type f)
+ do
+
+### Nice try; didn't work. Test: cmp ~ 10sec; diff: ~13sec; size check: ~ 26 sec; checksum: ~ 112 sec :-)
+### Size check
+##  ezmeret=$(stat -c%s "$i")
+##  azmeret=$(stat -c%s "$j")
+##  if [ "$ezmeret" -eq "$azmeret" ]
+##  then
+##
+### Checksum check
+##   ezchks=($(md5sum "$i"))
+##   azchks=($(md5sum "$j"))
+##   if [ "$ezchks" == "$azchks" ]
+##   then
+    ####diff $i $j >/dev/null
+    cmp -s $i $j
+    if [ "$?" -eq "0" ]
+    then
+     matched=1
+    fi
+##   fi
+##  fi
+ done
+
+ if [ "$matched" -eq "0" ]
+ then
+  filelist=("${filelist[@]}" "$i")
+ fi
+
+done
+
+echo "======== 8< ========"
+
+for i in "${filelist[@]}"
+do
+ echo "No match for: $i"
+done
