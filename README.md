@@ -35,7 +35,7 @@ A selection of handy CLI file handling utilities.
   [no] in its name. If [no] is not given then it defaults to 5. 0 is also
   accepted for [no]. Use as ". mkrnddir" to also change to the new directory.
 
-- nomatch4 [dir] checks if local files are there in [dir] (recursively). Those
+- nomatch4 [dir] checks if local files are there in [dir] recursively. Those
   with no match are listed. Filenames don't matter as cmp is used.
 
 I'm no programmer, so please don't blame me on the quality of the code. :-)
