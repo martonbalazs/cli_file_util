@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2014.05.29
+# 2014.10.28
 # Usage: addate filename
 
 if [[ "x$1" == "x" ||  ! -f $1 ]]
@@ -15,11 +15,17 @@ y="0"
 veg=${1##*.}
 elej=${1%.*}
 
-echo "d/D; m/M; y/Y: decrease/increase Day, Month, Year. r: reset; c: cancel; [enter]: ok."
+echo "d/D; m/M; y/Y: decrease/increase Day, Month, Year. r: reset; n: now; c: cancel; [enter]: ok."
+
+ftime=`date -r "$1" +%s`
+ntime=`date +%s`
+diffs=$(($ftime-$ntime))
+#echo $diffs
+diffsave=$diffs
 
 while true; do
 
-stamp=`date -d "$d days $m months $y years" +%y%m%d`
+stamp=`date -d "$d days $m months $y years $diffs sec" +%y%m%d`
 if [ "$1" == "${1/\./}" ]
 then
  newfnm="$1""_"$stamp
@@ -63,6 +69,14 @@ echo -e -n "\rMoving to: $newfnm"
   y=0
   m=0
   d=0
+  diffs=$diffsave
+ fi
+
+ if [[ $key == "n" ]] ; then
+  y=0
+  m=0
+  d=0
+  diffs=0
  fi
 
  if [[ $key == "c" ]] ; then
