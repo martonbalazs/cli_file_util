@@ -43,7 +43,7 @@ do
 ##   if [ "$ezchks" == "$azchks" ]
 ##   then
     ####diff $i $j >/dev/null
-    cmp -s $i $j
+    cmp -s "$i" $j
     if [ "$?" -eq "0" ]
     then
      matched=1

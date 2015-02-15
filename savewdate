@@ -1,6 +1,6 @@
 #!/bin/bash
-# 2014.10.28
-# Usage: savewdate filename
+# 2015.02.15
+# Usage: savewtime filename
 
 if [[ "x$1" == "x" ||  ! -f $1 ]]
 then
@@ -11,11 +11,19 @@ fi
 d="0"
 m="0"
 y="0"
+i="0"
+h="0"
 
-veg=${1##*.}
-elej=${1%.*}
+if [ "$1" == "${1/\./}" ]
+then
+ elej="$1"
+ veg=""
+else
+ veg=.${1##*.}
+ elej=${1%.*}
+fi
 
-echo "d/D; m/M; y/Y: decrease/increase Day, Month, Year. r: reset; n: now; c: cancel; [enter]: ok."
+echo "d/D; m/M; y/Y; i/I; h/H: decrease/increase Day, Month, Year, mInute, Hour. r: reset; n: now; t: trigger time; c: coment; x: cancel; [enter]: ok."
 
 ftime=`date -r "$1" +%s`
 ntime=`date +%s`
@@ -23,23 +31,46 @@ diffs=$(($ftime-$ntime))
 #echo $diffs
 diffsave=$diffs
 
+# time trigger: 1: date; 2: date+time; 0: none
+tt=1
+
+# raw comment string
+rcom=""
+
 while true; do
 
-stamp=`date -d "$d days $m months $y years $diffs sec" +%y%m%d`
 
-if [ "$1" == "${1/\./}" ]
-then
- newfnm="$1""_"$stamp
-else
- newfnm="$elej""_"$stamp".""$veg"
-fi
+ if [[ $tt -gt 0 ]] ; then
+  dstamp=_`date -d "$d days $m months $y years $diffs sec" +%y%m%d`
+ else
+  dstamp=""
+ fi
+ if [[ $tt -eq 2 ]] ; then
+  tstamp=_`date -d "$i minutes $h hours $diffs sec" +%H%M`
+ else
+  tstamp=""
+ fi
+ if [[ "$rcom" == "" ]] ; then
+  com=""
+ else
+  com="_$rcom"
+ fi
 
-echo -e -n "\rMaking a copy: $newfnm"
+newfn="$elej""$dstamp""$tstamp""$com""$veg"
 
+
+echo -e -n "\r\033[KMaking a copy: $newfn"
+
+ #echo "diffs: $diffs"
+ #echo "i: $i"
  read -s -n 1 key
 
  if [[ $key == "" ]] ; then
-  break
+  if [[ -f "$newfn" ]] ; then
+   echo -e "\nFile $newfn exists!"
+  else
+   break
+  fi
  fi
 
  if [[ $key == "y" ]] ; then
@@ -66,10 +97,28 @@ echo -e -n "\rMaking a copy: $newfnm"
   ((d++))
  fi
 
+ if [[ $key == "h" ]] ; then
+  ((h--))
+ fi
+
+ if [[ $key == "H" ]] ; then
+  ((h++))
+ fi
+
+ if [[ $key == "i" ]] ; then
+  ((i--))
+ fi
+
+ if [[ $key == "I" ]] ; then
+  ((i++))
+ fi
+
  if [[ $key == "r" ]] ; then
   y=0
   m=0
   d=0
+  h=0
+  i=0
   diffs=$diffsave
  fi
 
@@ -77,16 +126,30 @@ echo -e -n "\rMaking a copy: $newfnm"
   y=0
   m=0
   d=0
+  h=0
+  i=0
   diffs=0
  fi
 
- if [[ $key == "c" ]] ; then
+ if [[ $key == "x" ]] ; then
   echo -e "\nHaven't done anything."
   exit
  fi
 
+ if [[ $key == "c" ]] ; then
+  echo $'\nAny more comments?'
+  read rcom
+ fi
+
+ if [[ $key == "t" ]] ; then
+  if [[ $tt -eq 2 ]] ; then
+   tt=0
+  else
+   ((tt++))
+  fi
+ fi
 done
 
-echo -e "\n$1 --> $newfnm"
-cp "$1" "$newfnm"
-chmod a-w "$newfnm"
+echo -e "\n$1 --> $newfn"
+cp "$1" "$newfn"
+chmod a-w "$newfn"

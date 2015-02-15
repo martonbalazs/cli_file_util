@@ -5,14 +5,14 @@ Simple utils for cleaning, archiving, comparing files
 
 A selection of handy CLI file handling utilities.
 
-- addate [file], addtime [file] is a comfortable way of adding date or
-  date+time to a filename. Default is the last modification time of the file
-  but with a press of a button the current time can also be set. As the purpose
-  is most often archiving, write permission is also withdrawn from the file.
+- addate [file] is a comfortable way of adding date, date+time, or comments to
+  a filename. Default is the last modification date of the file but with a
+  press of a button the current date or date+time can also be set. Comment might
+  also be inserted in the filename as well. As the purpose is most often
+  archiving, write permission is also withdrawn from the file.
 
-- savewdate [file], savewtime [file] is very similar except it does not modify
-  the original filename (nor the permissions), rather makes a copy for
-  archiving.
+- savewdate [file] is very similar except it does not modify the original
+  filename (nor the permissions), rather makes a copy for archiving.
 
 - cleanfn cleans up the most commonly messy filenames in the current directory.
 
