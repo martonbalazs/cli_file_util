@@ -23,8 +23,9 @@ A selection of handy CLI file handling utilities.
 - cpcl [file] and mvcl [file] copy and move, respectively, a file to the
   current directory and also copy their new full path into the clipboard. If
   [file] is already in the current directory then only the full path is copied
-  into the clipboard. Very handy when you need to make a notice of a file.
-
+  into the clipboard. Very handy when you need to make a notice of a file. If no
+  file is given then only pwd is put into xclipboard.
+  
 - deloldfiles [no] deletes all files older than [no] days. If no [no] is given
   then default is 60 days. HANDLE WITH CARE!
 
