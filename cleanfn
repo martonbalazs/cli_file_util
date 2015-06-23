@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2013.10.24
+# 2016.6.16
 
 # Cleans up all filenames in the directory.
 
@@ -7,7 +7,8 @@ for i in *
 do
  if [ -f "$i" ]
  then
-   newfn=${i// /_}
+   newfn=`echo "$i"|iconv -f utf-8 -t ascii//translit`
+   newfn=${newfn// /_}
    newfn=${newfn//\'/_}
    newfn=${newfn//\`/_}
    newfn=${newfn//(/_}
@@ -21,36 +22,36 @@ do
    newfn=${newfn//\"/_}
    newfn=${newfn//,/_}
    newfn=${newfn//\?/_}
-   newfn=${newfn//\á/a}
-   newfn=${newfn//\à/a}
-   newfn=${newfn//\é/e}
-   newfn=${newfn//\è/e}
-   newfn=${newfn//\í/i}
-   newfn=${newfn//\ó/o}
-   newfn=${newfn//\ö/o}
-   newfn=${newfn//\ő/o}
-   newfn=${newfn//\ú/u}
-   newfn=${newfn//\ü/u}
-   newfn=${newfn//\ű/u}
-   newfn=${newfn//\Á/A}
-   newfn=${newfn//\É/E}
-   newfn=${newfn//\È/E}
-   newfn=${newfn//\Í/I}
-   newfn=${newfn//\Ó/O}
-   newfn=${newfn//\Ö/O}
-   newfn=${newfn//\Ő/O}
-   newfn=${newfn//\Ú/U}
-   newfn=${newfn//\Ü/U}
-   newfn=${newfn//\Ű/U}
+#   newfn=${newfn//\á/a}
+#   newfn=${newfn//\à/a}
+#   newfn=${newfn//\é/e}
+#   newfn=${newfn//\è/e}
+#   newfn=${newfn//\í/i}
+#   newfn=${newfn//\ó/o}
+#   newfn=${newfn//\ö/o}
+#   newfn=${newfn//\ő/o}
+#   newfn=${newfn//\ú/u}
+#   newfn=${newfn//\ü/u}
+#   newfn=${newfn//\ű/u}
+#   newfn=${newfn//\Á/A}
+#   newfn=${newfn//\É/E}
+#   newfn=${newfn//\È/E}
+#   newfn=${newfn//\Í/I}
+#   newfn=${newfn//\Ó/O}
+#   newfn=${newfn//\Ö/O}
+#   newfn=${newfn//\Ő/O}
+#   newfn=${newfn//\Ú/U}
+#   newfn=${newfn//\Ü/U}
+#   newfn=${newfn//\Ű/U}
   
   if [ "$i" != "$newfn" ]
   then
-   if [ -f $newfn ]
+   if [ -f "$newfn" ]
    then
     echo "$newfn exists, skipping $i"
    else
     echo "$i --> $newfn"
-    mv "$i" "$newfn"
+    mv "./$i" "./$newfn"
    fi
   fi
  fi
