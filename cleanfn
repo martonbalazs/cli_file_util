@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2016.6.16
+# 2015.6.16
 
 # Cleans up all filenames in the directory.
 
@@ -17,6 +17,7 @@ do
    newfn=${newfn//]/_}
    newfn=${newfn//!/_}
    newfn=${newfn//&/_}
+   newfn=${newfn//+/_}
    newfn=${newfn//:/_}
    newfn=${newfn//;/_}
    newfn=${newfn//\"/_}
