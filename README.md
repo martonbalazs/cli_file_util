@@ -24,7 +24,8 @@ A selection of handy CLI file handling utilities.
   current directory and also copy their new full path into the clipboard. If
   [file] is already in the current directory then only the full path is copied
   into the clipboard. Very handy when you need to make a notice of a file. If no
-  file is given then only pwd is put into xclipboard.
+  file is given then only pwd is put into xclipboard. Versions lcpcl anv lmvcl do
+  the same without clipboarding the path.
   
 - deloldfiles [no] deletes all files older than [no] days. If no [no] is given
   then default is 60 days. HANDLE WITH CARE!

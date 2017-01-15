@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Copies file to current dir and puts filename into xclipboard. If file is in current dir then just does xclipboard.
+# Requires xclip installed.
+
+
+if [[ ! $# == 1 ]] ; then
+ echo "Just give me one single file."
+ exit
+fi
+
+if [[ ! -f $1 ]] ; then
+ echo "Can't find the file $1."
+ exit
+fi
+
+command -v xclip > /dev/null 2>&1
+if [ "$?" -ne "0" ]; then
+ echo "I need xclip but I can't find it."
+ exit
+fi
+
+dirn=`dirname "$1"`
+filen=`basename "$1"`
+
+if [[ "$dirn" != "." ]]; then
+ cp -iv "$1" .
+fi
+
+echo "Copied to clipboard: $filen"
+echo -n "$filen"|xclip
+
