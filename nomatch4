@@ -47,6 +47,7 @@ do
     if [ "$?" -eq "0" ]
     then
      matched=1
+     echo "$i $j match"
     fi
 ##   fi
 ##  fi
