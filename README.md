@@ -31,8 +31,8 @@ A selection of handy CLI file handling utilities.
   then default is 60 days. HANDLE WITH CARE!
 
 - linkffile [dir] [file] reads [file] until the first space of each line, and
-  recursively links files from [dir] with matching filenames to the current
-  dir. Asks questions if ambiguous.
+  recursively links files to the current dir if it read full paths or else from
+  [dir] with matching filenames. Asks questions if ambiguous.
 
 - mkrnddir [no] creates a directory with the date and a random string of length
   [no] in its name. If [no] is not given then it defaults to 5. 0 is also

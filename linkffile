@@ -19,34 +19,66 @@ sorszam=`cat $2 | awk 'BEGIN { a = 0 } { a++ } END { print(a); }'`
 
 for i in `seq 1 $sorszam`;
 do
- awkmondta=`cat $2 | awk '((NR == sor) && ($1 !~ /^\*/)) { 
- print($1)
- }' sor=$i`
- if [ "$awkmondta" != "" ]; then
-  findutasitas="find $1 -name *$awkmondta*"
-  sorsz=`$findutasitas 2>/dev/null | awk 'BEGIN { a = 0 } { a++ } END { print(a); }'`
-  if [ "$sorsz" = "1" ]; then
-   ln -s `$findutasitas 2>/dev/null`
-  fi
-  if [ "$sorsz" = "0" ]; then
-   echo "Couldn't find $awkmondta"
-   echo ""
-  fi
-  if [ $sorsz -gt 1 ]; then
-   melyik=0
-#   while [ $melyik -lt 1 ] || [ $melyik -gt $sorsz ]; do
-   while [[ !($melyik -ge 1 && $melyik -le $sorsz) ]]; do
-    echo "Found several of:"
-    $findutasitas 2>/dev/null
-    echo "Which one should we use?"
-    read melyik
-    if [ $melyik -le $sorsz ] && [ $melyik -ge 1 ]; then
-     ln -s `$findutasitas 2>/dev/null | awk '(NR == melyikis) {print($1)}' melyikis=$melyik`
-    else
-     echo "I don't like your answer."
-    fi
+ target=""
+
+# If path is full and valid then link it right away
+ fline=`sed "${i}q;d" "$2"`
+ if [ -f "$fline" ]
+ then
+  target=$fline
+
+# Otherwise let's find it
+ else
+  awkmondta=`cat $2 | awk '((NR == sor) && ($1 !~ /^\*/)) { 
+  print($1)
+  }' sor=$i`
+  if [ "$awkmondta" != "" ]; then
+   findutasitas="$(find $1 -name \*$awkmondta\*)"
+   #echo "findu: $findutasitas"
+   sorsz=`echo "$findutasitas" | awk 'BEGIN { a = 0 } { a++ } END { print(a); }'`
+   if [ "$sorsz" = "1" ]; then
+    target="$findutasitas"
+   fi
+   if [ "$sorsz" = "0" ]; then
+    echo "Couldn't find $awkmondta"
     echo ""
-   done
+   fi
+   if [ $sorsz -gt 1 ]; then
+    melyik=0
+#    while [ $melyik -lt 1 ] || [ $melyik -gt $sorsz ]; do
+    while [[ !($melyik -ge 1 && $melyik -le $sorsz) ]]; do
+     echo "For $awkmondta, found several of:"
+     echo "$findutasitas" | awk '{ print(NR". "$0) }'
+     echo "Which one should we use? (x: none)"
+     read melyik
+     if [ "$melyik" == "x" ]
+     then
+      break
+     elif [ $melyik -le $sorsz ] && [ $melyik -ge 1 ]
+     then
+      target=`echo "$findutasitas" | awk '(NR == melyikis) {print($1)}' melyikis=$melyik`
+     else
+      echo "I don't like your answer."
+     fi
+     echo ""
+    done
+   fi
   fi
+ fi
+
+# Check if we have a link/file already under that name
+ if [ "$target" != "" ]
+ then
+  localfn=$(basename $target)
+  while [ -e "$localfn" ]
+  do
+   veg=${localfn##*.}
+   elej=${localfn%.*}
+   localfn="$elej-.$veg"
+  done
+
+# Now do the link
+  # echo "$target --> $localfn"
+  ln -sv "$target" "$localfn"
  fi
 done
