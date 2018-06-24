@@ -1,17 +1,15 @@
 #!/bin/bash
 mkdir kul
-mkdir $1/kul
-for i in `ls *.*`; do
- if [[ -e $i && -e $1/$i ]]
+for i in *; do
+ #echo "i: $i"
+ if [[ -f "$i" && -f "$1/$i" ]]
   then
-  cmp -s `ls $i` `ls $1/$i`
+  cmp -s "$i" "$1/$i"
   if [ "$?" -ne "0" ]
     then
-    echo $i
-    mv $i kul/
-   mv $1/$i $1/kul
-#    emacs kul/$i $1/kul/$i
-   vimdiff kul/$i $1/kul/$i
+    echo "$i"
+    cp "$i" kul/
+   vimdiff "kul/$i" "$1/$i" -c "wincmd l" -c "se ro" -c "se nomodifiable"
   fi
  fi
 done
