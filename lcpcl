@@ -29,4 +29,3 @@ fi
 
 echo "Copied to clipboard: $filen"
 echo -n "$filen"|xclip
-
