@@ -1,0 +1,23 @@
+#!/bin/bash
+
+command -v vipe > /dev/null 2>&1
+if [ "$?" -ne "0" ]; then
+ echo "I need vipe, please install it first."
+ exit
+fi
+
+newfn=$(echo "$1"|vipe)
+
+if [ -f "$newfn" ]
+then
+ echo "File $newfn exists, exiting."
+ exit
+fi
+
+if [ -d "$newfn" ]
+then
+ echo "Dir $newfn exists, exiting."
+ exit
+fi
+
+cp -iv "$1" "$newfn"

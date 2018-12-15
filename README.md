@@ -26,6 +26,9 @@ A selection of handy CLI file handling utilities.
   into the clipboard. Very handy when you need to make a notice of a file. If no
   file is given then only pwd is put into xclipboard. Versions lcpcl anv lmvcl do
   the same without clipboarding the path.
+
+- cpfn [file or dir] and mvfn [file or dir] copies or moves a file or a dir
+  allowing to comfortably edit its name. It requires vipe.
   
 - deloldfiles [no] deletes all files older than [no] days. If no [no] is given
   then default is 60 days. HANDLE WITH CARE!
