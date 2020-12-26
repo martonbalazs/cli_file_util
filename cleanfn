@@ -1,31 +1,41 @@
 #!/bin/bash
-# 2016-12-23
 
 # Cleans up all filenames in the directory.
+# Can give optional dir.
 
-for i in *
+if [ "$#" == 0 ]
+then
+ dir="."
+else
+ dir="$1"
+fi
+
+for i in "$dir"/*
 do
+#echo "ezafile: $i"
+ pathname=${i%/*}
+ fn=${i##*/}
  if [ -f "$i" ]
  then
-   newfn=`echo "$i"|iconv -f utf-8 -t ascii//translit`
-   newfn=${newfn// /_}
-   newfn=${newfn//\'/_}
-   newfn=${newfn//\`/_}
-   newfn=${newfn//(/_}
-   newfn=${newfn//)/_}
-   newfn=${newfn//[/_}
-   newfn=${newfn//]/_}
-   newfn=${newfn//!/_}
-   newfn=${newfn//&/_}
-   newfn=${newfn//+/_}
-   newfn=${newfn//:/_}
-   newfn=${newfn//;/_}
-   newfn=${newfn//\"/_}
-   newfn=${newfn//,/_}
-   newfn=${newfn//\?/_}
-   newfn=${newfn//=/_}
-   newfn=${newfn//%/_}
-   newfn=${newfn//#/_}
+  newfn=`echo "$fn"|iconv -f utf-8 -t ascii//translit`
+  newfn=${newfn// /_}
+  newfn=${newfn//\'/_}
+  newfn=${newfn//\`/_}
+  newfn=${newfn//(/_}
+  newfn=${newfn//)/_}
+  newfn=${newfn//[/_}
+  newfn=${newfn//]/_}
+  newfn=${newfn//!/_}
+  newfn=${newfn//&/_}
+  newfn=${newfn//+/_}
+  newfn=${newfn//:/_}
+  newfn=${newfn//;/_}
+  newfn=${newfn//\"/_}
+  newfn=${newfn//,/_}
+  newfn=${newfn//\?/_}
+  newfn=${newfn//=/_}
+  newfn=${newfn//%/_}
+  newfn=${newfn//#/_}
 #   newfn=${newfn//\á/a}
 #   newfn=${newfn//\à/a}
 #   newfn=${newfn//\é/e}
@@ -48,14 +58,15 @@ do
 #   newfn=${newfn//\Ü/U}
 #   newfn=${newfn//\Ű/U}
   
-  if [ "$i" != "$newfn" ]
+  newi="$pathname/$newfn"
+  if [ "$i" != "$newi" ]
   then
-   if [ -f "$newfn" ]
+   if [ -f "$newi" ]
    then
-    echo "$newfn exists, skipping $i"
+    echo "$newi exists, skipping $i"
    else
-    echo "$i --> $newfn"
-    mv "./$i" "./$newfn"
+    echo "$i --> $newi"
+    mv "$i" "$newi"
    fi
   fi
  fi

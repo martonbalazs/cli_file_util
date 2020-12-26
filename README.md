@@ -42,7 +42,7 @@ A selection of handy CLI file handling utilities.
   accepted for [no]. Use as ". mkrnddir" to also change to the new directory.
 
 - nomatch4 [dir] checks if local files are there in [dir] recursively. Those
-  with no match are listed. Filenames don't matter as cmp is used.
+  with a match are separated in a directory. Filenames don't matter as cmp is used.
 
 I'm no programmer, so please don't blame me on the quality of the code. :-)
 Licensed under GNU GPLv3.

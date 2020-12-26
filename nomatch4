@@ -25,6 +25,7 @@ do
   continue
  fi
  matched=0
+ mkdir -p matched/
 
 # For all remote files
  for j in $(find "$remdir" -type f)
@@ -48,6 +49,7 @@ do
     then
      matched=1
      echo "$i $j match"
+     mv "$i" matched/
     fi
 ##   fi
 ##  fi
