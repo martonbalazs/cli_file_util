@@ -30,8 +30,8 @@ fi
 echo "Copied to clipboard: `pwd`/$filen"
 echo -n "`pwd`/$filen"|xclip
 
-echo "[Enter] to copy filename only to clipboard"
-read -n1 -s
-
-echo "Copied to clipboard: $filen"
-echo -n "$filen"|xclip
+# echo "[Enter] to copy filename only to clipboard"
+# read -n1 -s
+# 
+# echo "Copied to clipboard: $filen"
+# echo -n "$filen"|xclip
