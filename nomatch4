@@ -17,20 +17,24 @@ then
  exit
 fi
 
+mkdir -p matched/
+
 # For all local files
 for i in *
 do
+ #echo "$i"
  if [ ! -f "$i" ]
  then
   continue
  fi
  matched=0
- mkdir -p matched/
 
 # For all remote files
- for j in $(find "$remdir" -type f)
+ #for j in $(find "$remdir" -type f)
+ find "$remdir" -type f -print0 |
+ while IFS= read -r -d '' j
  do
-
+  #echo "find: $j"
 ### Nice try; didn't work. Test: cmp ~ 10sec; diff: ~13sec; size check: ~ 26 sec; checksum: ~ 112 sec :-)
 ### Size check
 ##  ezmeret=$(stat -c%s "$i")
@@ -44,10 +48,10 @@ do
 ##   if [ "$ezchks" == "$azchks" ]
 ##   then
     ####diff $i $j >/dev/null
-    cmp -s "$i" $j
+    cmp -s "$i" "$j"
     if [ "$?" -eq "0" ]
     then
-     matched=1
+     #matched=1
      echo "$i $j match"
      mv "$i" matched/
     fi
@@ -55,16 +59,17 @@ do
 ##  fi
  done
 
- if [ "$matched" -eq "0" ]
- then
-  filelist=("${filelist[@]}" "$i")
- fi
+# if [ "$matched" -eq "0" ]
+# then
+#  filelist=("${filelist[@]}" "$i")
+# fi
 
 done
 
 echo "======== 8< ========"
 
-for i in "${filelist[@]}"
-do
- echo "No match for: $i"
-done
+#for i in "${filelist[@]}"
+#do
+# echo "No match for: $i"
+#done
+ls -All -rt

@@ -36,6 +36,7 @@ do
   newfn=${newfn//=/_}
   newfn=${newfn//%/_}
   newfn=${newfn//#/_}
+  newfn=${newfn//\~/_}
 #   newfn=${newfn//\á/a}
 #   newfn=${newfn//\à/a}
 #   newfn=${newfn//\é/e}

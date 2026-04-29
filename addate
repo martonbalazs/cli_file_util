@@ -1,6 +1,5 @@
 #!/bin/bash
-# 2015.02.15
-# Usage: savewtime filename
+# Usage: addate filename
 
 if [[ "x$1" == "x" ||  ! -f $1 ]]
 then
